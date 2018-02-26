@@ -1,11 +1,5 @@
-/******************************************************************************
- ** Logisim goes FPGA automatic generated Verilog code                       **
- **                                                                          **
- ** Component : Multiplexer_bus_16                                           **
- **                                                                          **
- ******************************************************************************/
 
-module Multiplexer_bus_16( Enable,
+module Multiplexer_16( Enable,
                            MuxIn_0,
                            MuxIn_1,
                            MuxIn_10,
@@ -24,16 +18,8 @@ module Multiplexer_bus_16( Enable,
                            MuxIn_9,
                            Sel,
                            MuxOut);
-
-   /***************************************************************************
-    ** Here all module parameters are defined with a dummy value             **
-    ***************************************************************************/
    parameter NrOfBits = 1;
 
-
-   /***************************************************************************
-    ** Here the inputs are defined                                           **
-    ***************************************************************************/
    input  Enable;
    input[NrOfBits-1:0]  MuxIn_0;
    input[NrOfBits-1:0]  MuxIn_1;
@@ -53,14 +39,9 @@ module Multiplexer_bus_16( Enable,
    input[NrOfBits-1:0]  MuxIn_9;
    input[3:0]  Sel;
 
-   /***************************************************************************
-    ** Here the outputs are defined                                          **
-    ***************************************************************************/
    output[NrOfBits-1:0] MuxOut;
 
-   /***************************************************************************
-    ** Here the internal registers are defined                               **
-    ***************************************************************************/
+
    reg[NrOfBits-1:0] s_selected_vector;
 
    assign MuxOut = s_selected_vector;
