@@ -27,8 +27,12 @@ module storage(
     input [11:0]address;
     input [31:0]datain;
     input clk,str,ld,clr;
-    output reg [31:0]dataout;
-	output reg [31:0]r_dataout;
+    output [31:0]dataout;
+    output [31:0]r_dataout;
+    
+    assign dataout = data[address];
+    assign r_dataout = data[r_address];
+	
     reg [31:0]data[0:4095];
     integer i;
     initial 
@@ -42,7 +46,5 @@ module storage(
        for(i=0;i<=4095;i=i+1)
          data[i]=32'h00000000;
     if(str==1'b1)data[address]=datain;
-    if(ld==1'b1)dataout=data[address];
-	r_dataout=data[r_address];
     end
 endmodule

@@ -1,4 +1,4 @@
-`timescale 1ns / 1ps
+`timescale 10ns / 1ps
 module CPU_tb;
 
     reg clk;
@@ -12,6 +12,10 @@ module CPU_tb;
     wire [15:0] v_branch_cycles;
     wire [15:0] v_branch_sucess_cycles;
     
+    reg [15:0]count;
+    initial count = 0;
+    always@(posedge clk)
+       count = count+1;
      CPU cpu(clk, 
          reset,
          addr_debug,
@@ -24,10 +28,19 @@ module CPU_tb;
          v_branch_sucess_cycles);
     initial clk = 0;
     always #1 clk = ~clk;
-    initial reset = 0;
+    initial reset = 1;
+    initial #20 reset  = 0;
     initial addr_debug = 3;
     initial #2000 addr_debug = 2;
     initial #4000 $finish;
+    initial
+        begin:init_blk
+            integer file;
+            file = $fopen("mon.out","w");
+            #4000 $fclose(file);
+        end
+    always @ (posedge clk)
+        $fwrite("%h\n",v_PC);
     
     
 endmodule

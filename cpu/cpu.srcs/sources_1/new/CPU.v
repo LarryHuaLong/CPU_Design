@@ -115,7 +115,7 @@ module CPU(
 			PC <= 0;
 		else if(!halt)
 			PC <= PC_in;
-	wire branch_addr;
+	wire [31:0]branch_addr;
 	assign branch_addr = PC_plus_1 + {extender_out[29:0],2'b00};
 	assign PC_in = jump ? (jump_register ? RF_A : {PC_plus_1[31:28],IM_out[25:0],2'b00} )
 						: (branch ? branch_addr : PC_plus_1);
@@ -123,7 +123,7 @@ module CPU(
 	//数码管锁�?
 	reg Syscallout;
 	initial Syscallout = 0;
-	always @(posedge clk)
+	always @(negedge clk)
 		if(reset) 
 			Syscallout = 0;
 		else if(display_a0)
@@ -133,8 +133,8 @@ module CPU(
 	//PC加一
 	assign PC_plus_1 = PC + 4;
 	//指令寄存�?
-	ins_storage IM(.address(IM_in),
-				   .dataout(IM_out));
+	IM_Storage IM(.Address(IM_in),
+				   .Data(IM_out));
 	assign IM_in = PC[11:2];
 	assign OP = IM_out[31:26];
 	assign Funct = IM_out[5:0];
@@ -180,7 +180,7 @@ module CPU(
 			   .datain(DM_in_data),
 			   .clk(clk),
 			   .str(DM_WE),
-			   .ld(),
+			   .ld(1'b1),
 			   .dataout(DM_out),
 			   .r_dataout(v_memory_out),
 			   .clr());

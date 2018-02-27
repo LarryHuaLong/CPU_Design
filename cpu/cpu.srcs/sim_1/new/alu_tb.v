@@ -11,8 +11,8 @@ module alu_tb;
             wire UOF;
             ALU alu(S,X,Y,Result,Result2,Equal,overflow,UOF);
             initial begin
-                X = 32'd20;
-                Y = 32'd2;
+                X = 32'h80000000;
+                Y = 32'd3;
                 S = 0;
                 #1 S = S+1;
                 #1 S = S+1;

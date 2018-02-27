@@ -28,8 +28,8 @@ module register(
        input [31:0] Din;
        input WriteEnable;
        input clk;
-       output reg [31:0] Reg1;
-       output reg [31:0] Reg2;
+       output [31:0] Reg1;
+       output [31:0] Reg2;
        reg [31:0] regs [31:0];
        reg [5:0] count;
        initial
@@ -46,9 +46,8 @@ module register(
            else if(WriteEnable == 1'b1 && WriteRegNo != 0)
               regs[WriteRegNo]=Din;
        end
-       always @(*)
-       begin
-           Reg1 = regs[Reg1No];
-           Reg2 = regs[Reg2No];
-       end
+       
+       
+       assign Reg1 = regs[Reg1No];
+       assign Reg2 = regs[Reg2No];
 endmodule

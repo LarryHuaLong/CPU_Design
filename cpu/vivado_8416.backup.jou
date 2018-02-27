@@ -1,0 +1,23 @@
+#-----------------------------------------------------------
+# Vivado v2015.2 (64-bit)
+# SW Build 1266856 on Fri Jun 26 16:35:25 MDT 2015
+# IP Build 1264090 on Wed Jun 24 14:22:01 MDT 2015
+# Start of session at: Tue Feb 27 18:34:25 2018
+# Process ID: 7388
+# Log file: E:/CPU_Design/cpu/vivado.log
+# Journal file: E:/CPU_Design/cpu\vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project -part xc7a100tcsg324-1 E:/CPU_Design/cpu/cpu.xpr
+launch_simulation
+open_wave_config E:/CPU_Design/cpu/CPU_tb_behav.wcfg
+source CPU_tb.tcl
+run all
+save_wave_config {E:/CPU_Design/cpu/CPU_tb_behav.wcfg}
+add_wave {{/CPU_tb/cpu/control}} 
+close_sim
+launch_simulation
+open_wave_config E:/CPU_Design/cpu/CPU_tb_behav.wcfg
+source CPU_tb.tcl
+run all
+synth_design -rtl -name rtl_1

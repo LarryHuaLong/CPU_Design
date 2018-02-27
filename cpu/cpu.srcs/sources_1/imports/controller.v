@@ -1,94 +1,42 @@
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 2018/02/27 08:48:27
-// Design Name: 
-// Module Name: controller
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
-
-
 module controller(
     input [5:0] OP,
     input [5:0] Funct,
     output [27:0] control_signal
     );
-    reg op0,bltz,j,jal,beq,bne,addi,addiu,slti,sltiu,andi,ori,lh,lw,sw;
-    reg f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,f14;
+    wire op0,bltz,j,jal,beq,bne,addi,addiu,slti,sltiu,andi,ori,lh,lw,sw;
+    wire f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,f14;
     wire sll,srl,sra,srlv,jr,syscall,add,addu,sub,c_and,c_or,c_nor,slt,sltu;
-    always@(*) begin
-        if (OP == 6'h00) op0 = 1;
-            else op0 = 0;
-        if (OP == 6'h01) bltz = 1;
-            else bltz = 0;
-        if (OP == 6'h02) j = 1;
-            else j = 0;
-        if (OP == 6'h03) jal = 1;
-            else jal = 0;
-        if (OP == 6'h04) beq = 1;
-            else beq = 0;
-        if (OP == 6'h05) bne = 1;
-            else bne = 0;
-        if (OP == 6'h08) addi = 1;
-            else addi = 0;
-        if (OP == 6'h09) addiu = 1;
-            else addiu = 0;
-        if (OP == 6'h0a) slti = 1;
-            else slti = 0;
-        if (OP == 6'h0b) sltiu = 1;
-            else sltiu = 0;
-        if (OP == 6'h0c) andi = 1;
-            else andi = 0;
-        if (OP == 6'h0d) ori = 1;
-            else ori = 0;
-        if (OP == 6'h21) lh = 1;
-            else lh = 0;
-        if (OP == 6'h23) lw = 1;
-            else lw = 0;
-        if (OP == 6'h2b) sw = 1;
-            else sw = 0;    
-            
-        if (Funct == 6'h00) f1 = 1;
-            else f1 = 0;
-        if (Funct == 6'h02) f2 = 1;
-            else f2 = 0;
-        if (Funct == 6'h03) f3 = 1;
-            else f3 = 0;
-        if (Funct == 6'h06) f4 = 1;
-            else f4 = 0;
-        if (Funct == 6'h08) f5 = 1;
-            else f5 = 0;
-        if (Funct == 6'h0c) f6 = 1;
-            else f6 = 0;
-        if (Funct == 6'h20) f7 = 1;
-            else f7 = 0;
-        if (Funct == 6'h21) f8 = 1;
-            else f8 = 0;
-        if (Funct == 6'h22) f9 = 1;
-            else f9 = 0;
-        if (Funct == 6'h24) f10 = 1;
-            else f10 = 0;
-        if (Funct == 6'h25) f11 = 1;
-            else f11 = 0;
-        if (Funct == 6'h27) f12 = 1;
-            else f12 = 0;
-        if (Funct == 6'h2a) f13 = 1;
-            else f13 = 0;
-        if (Funct == 6'h2b) f14 = 1;
-            else f14 = 0;
-    end
+    assign op0 = (OP == 6'h00);
+    assign bltz = (OP == 6'h01);
+    assign j = (OP == 6'h02);
+    assign jal = (OP == 6'h03);
+    assign beq = (OP == 6'h04);
+    assign bne = (OP == 6'h05);
+    assign addi = (OP == 6'h08);
+    assign addiu = (OP == 6'h09);
+    assign slti = (OP == 6'h0a);
+    assign sltiu = (OP == 6'h0b);
+    assign andi = (OP == 6'h0c);
+    assign ori = (OP == 6'h0d);
+    assign lh = (OP == 6'h21);
+    assign lw = (OP == 6'h23);
+    assign sw = (OP == 6'h2b);
+        
+    assign f1 = (Funct == 6'h00);
+    assign f2 = (Funct == 6'h02);
+    assign f3 = (Funct == 6'h03);
+    assign f4 = (Funct == 6'h06);
+    assign f5 = (Funct == 6'h08);
+    assign f6 = (Funct == 6'h0c);
+    assign f7 = (Funct == 6'h20);
+    assign f8 = (Funct == 6'h21);
+    assign f9 = (Funct == 6'h22);
+    assign f10 = (Funct == 6'h24);
+    assign f11 = (Funct == 6'h25);
+    assign f12 = (Funct == 6'h27);
+    assign f13 = (Funct == 6'h2a);
+    assign f14 = (Funct == 6'h2b);
    assign sll = op0&f1;
    assign srl = op0&f2;     
    assign sra = op0&f3;

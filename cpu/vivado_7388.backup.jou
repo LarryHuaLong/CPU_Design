@@ -1,0 +1,40 @@
+#-----------------------------------------------------------
+# Vivado v2015.2 (64-bit)
+# SW Build 1266856 on Fri Jun 26 16:35:25 MDT 2015
+# IP Build 1264090 on Wed Jun 24 14:22:01 MDT 2015
+# Start of session at: Tue Feb 27 17:02:10 2018
+# Process ID: 1464
+# Log file: D:/CPU_Design/cpu/vivado.log
+# Journal file: D:/CPU_Design/cpu\vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project D:/CPU_Design/cpu/cpu.xpr
+launch_simulation
+source CPU_tb.tcl
+close_sim
+launch_simulation
+source CPU_tb.tcl
+run all
+run all
+restart
+run all
+save_wave_config {D:/CPU_Design/cpu/CPU_tb_behav.wcfg}
+add_files -fileset sim_1 -norecurse D:/CPU_Design/cpu/CPU_tb_behav.wcfg
+set_property xsim.view D:/CPU_Design/cpu/CPU_tb_behav.wcfg [get_filesets sim_1]
+close_sim
+launch_simulation
+open_wave_config D:/CPU_Design/cpu/CPU_tb_behav.wcfg
+source CPU_tb.tcl
+run all
+add_wave {{/CPU_tb/cpu/beq}} 
+add_wave {{/CPU_tb/cpu/bne}} 
+add_wave {{/CPU_tb/cpu/bltz}} 
+add_wave {{/CPU_tb/cpu/PC_in}} 
+add_wave {{/CPU_tb/cpu/extender_in}} 
+add_wave {{/CPU_tb/cpu/PC_plus_1}} 
+add_wave {{/CPU_tb/cpu/branch_addr}} 
+restart
+run all
+run all
+save_wave_config {D:/CPU_Design/cpu/CPU_tb_behav.wcfg}
+close_sim

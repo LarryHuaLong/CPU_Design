@@ -8,8 +8,8 @@ module ALU( S,
             Overflow,
             UOF);
    input [3:0]S;
-   input [31:0]X;
-   input [31:0]Y;
+   input signed [31:0]X;
+   input signed [31:0]Y;
    output [31:0]Result;
    output [31:0]Result2;
    output Equal;

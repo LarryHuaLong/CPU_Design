@@ -1,24 +1,4 @@
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 2018/02/26 15:57:32
-// Design Name: 
-// Module Name: ins_storage
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
-
 
 module ins_storage(
      address,dataout
@@ -33,7 +13,7 @@ module ins_storage(
     data[2]=32'h20110001;
     data[3]=32'h20120002;
     data[4]=32'h20130003;
-    data[5]=32'h08000009;
+    data[5]=32'h08000c09;
     data[6]=32'h20110001;
     data[7]=32'h20120002;
     data[8]=32'h20130003;
