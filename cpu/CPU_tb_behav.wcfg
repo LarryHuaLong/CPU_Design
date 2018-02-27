@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="CPU_tb_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="CPU_tb" />
+            <top_module name="glbl" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="15" />
+   <wvobject db_ref_id="1" fp_name="/CPU_tb/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/CPU_tb/v_Syscall_out" type="array">
+      <obj_property name="ElementShortName">v_Syscall_out[31:0]</obj_property>
+      <obj_property name="ObjectShortName">v_Syscall_out[31:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/CPU_tb/v_PC" type="array">
+      <obj_property name="ElementShortName">v_PC[31:0]</obj_property>
+      <obj_property name="ObjectShortName">v_PC[31:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/CPU_tb/v_memory_out" type="array">
+      <obj_property name="ElementShortName">v_memory_out[31:0]</obj_property>
+      <obj_property name="ObjectShortName">v_memory_out[31:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/CPU_tb/v_total_cycles" type="array">
+      <obj_property name="ElementShortName">v_total_cycles[15:0]</obj_property>
+      <obj_property name="ObjectShortName">v_total_cycles[15:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/CPU_tb/v_jump_cycles" type="array">
+      <obj_property name="ElementShortName">v_jump_cycles[15:0]</obj_property>
+      <obj_property name="ObjectShortName">v_jump_cycles[15:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/CPU_tb/v_branch_cycles" type="array">
+      <obj_property name="ElementShortName">v_branch_cycles[15:0]</obj_property>
+      <obj_property name="ObjectShortName">v_branch_cycles[15:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/CPU_tb/v_branch_sucess_cycles" type="array">
+      <obj_property name="ElementShortName">v_branch_sucess_cycles[15:0]</obj_property>
+      <obj_property name="ObjectShortName">v_branch_sucess_cycles[15:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/CPU_tb/cpu/beq" type="logic">
+      <obj_property name="ElementShortName">beq</obj_property>
+      <obj_property name="ObjectShortName">beq</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/CPU_tb/cpu/bne" type="logic">
+      <obj_property name="ElementShortName">bne</obj_property>
+      <obj_property name="ObjectShortName">bne</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/CPU_tb/cpu/bltz" type="logic">
+      <obj_property name="ElementShortName">bltz</obj_property>
+      <obj_property name="ObjectShortName">bltz</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/CPU_tb/cpu/PC_in" type="array">
+      <obj_property name="ElementShortName">PC_in[31:0]</obj_property>
+      <obj_property name="ObjectShortName">PC_in[31:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/CPU_tb/cpu/extender_in" type="array">
+      <obj_property name="ElementShortName">extender_in[16:0]</obj_property>
+      <obj_property name="ObjectShortName">extender_in[16:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/CPU_tb/cpu/PC_plus_1" type="array">
+      <obj_property name="ElementShortName">PC_plus_1[31:0]</obj_property>
+      <obj_property name="ObjectShortName">PC_plus_1[31:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/CPU_tb/cpu/branch_addr" type="logic">
+      <obj_property name="ElementShortName">branch_addr</obj_property>
+      <obj_property name="ObjectShortName">branch_addr</obj_property>
+   </wvobject>
+</wave_config>

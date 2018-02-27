@@ -115,9 +115,10 @@ module CPU(
 			PC <= 0;
 		else if(!halt)
 			PC <= PC_in;
-			
+	wire branch_addr;
+	assign branch_addr = PC_plus_1 + {extender_out[29:0],2'b00};
 	assign PC_in = jump ? (jump_register ? RF_A : {PC_plus_1[31:28],IM_out[25:0],2'b00} )
-						: (branch ? (PC_plus_1 + {extender_out[29:0],2'b00}) : PC_plus_1);
+						: (branch ? branch_addr : PC_plus_1);
     assign v_PC = PC;
 	//数码管锁�?
 	reg Syscallout;

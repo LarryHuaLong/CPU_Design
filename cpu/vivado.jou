@@ -9,3 +9,12 @@
 #-----------------------------------------------------------
 start_gui
 open_project D:/CPU_Design/cpu/cpu.xpr
+launch_simulation
+source CPU_tb.tcl
+close_sim
+launch_simulation
+source CPU_tb.tcl
+run all
+run all
+restart
+run all
