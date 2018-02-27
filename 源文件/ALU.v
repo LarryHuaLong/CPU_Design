@@ -87,10 +87,10 @@ module ALU( S,
    assign BUF_remainder = BUF_X % BUF_Y;
    assign BUF_add_result = X + Y;
    assign BUF_sub_result = X - Y;
-   assign BUF_and_32_bit = X & Y
+   assign BUF_and_32_bit = X & Y;
    assign BUF_or_32_bit = X | Y;
    assign BUF_xor_32_bit = X ^ Y;
-   assign BUF_nor_32_bit = ~(X | );
+   assign BUF_nor_32_bit = ~(X | Y);
    assign BUF_signed_comparator = ($signed(DataA) > $signed(DataB));
    assign BUF_unsigned_comparator = ($unsigned(X) > $unsigned(Y));
    assign Equal = (X == Y);
