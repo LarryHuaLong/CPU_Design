@@ -82,7 +82,7 @@ module CPU(
 	wire [4:0]RF_in_rB;
 	wire [31:0]ALU_in_X;
 	wire [31:0]ALU_in_Y;
-	wire [3:0]ALU_in_S;
+	wire [31:0]ALU_in_S;
 	wire [31:0]DM_in_data;
 	wire [11:0]DM_in_addr;
 	wire [16:0]extender_in;
@@ -92,9 +92,9 @@ module CPU(
 	wire [31:0]IM_out;
 	wire [5:0]OP;
 	wire [5:0]Funct;
-	wire [4:0]rs;
-	wire [4:0]rd;
-	wire [4:0]rt;
+	wire [4:0]IM_rs;
+	wire [4:0]IM_rd;
+	wire [4:0]IM_rt;
 	wire [4:0]IM_shamt;
 	wire [15:0]IM_IMM;
 	wire [31:0]RF_A;
@@ -112,7 +112,7 @@ module CPU(
 	initial PC = 0;
 	always @(posedge clk)
 		if(reset)
-			PC <= 0;
+				PC <= 0;
 		else if(!halt)
 			PC <= PC_in;
 			
