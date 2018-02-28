@@ -1,8 +1,2 @@
-cpu/cpu.sim
-cpu/cpu.cache
-cpu/cpu.hw
-cpu/cpu.runs
-cpu/*.jou
-cpu/*.log
 
 
