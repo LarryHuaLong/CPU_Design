@@ -22,14 +22,15 @@ module DisplaySwitch(
     input BTNR,
     input [15:0] SW,
     output wire [7:0] anodes,
-    output wire [7:0] cathodes,
+    output wire [7:0] cathodes
 );
     parameter DisplayOrdinary = 2'b00;
     parameter DisplayMemory = 2'b01;
     parameter DisplayPC = 2'b10;
     parameter DisplayStatistics = 2'b11;
 
-    wire dividedClk;
+    wire dividedClk400hz;
+    wire dividedclk100hz;
 
     wire [31:0] totalCycles;
     wire [31:0] unconditionalBranchCount;
@@ -46,10 +47,10 @@ module DisplaySwitch(
     ////////////////////////
     // Module definitions //
     ////////////////////////
-    divide timeDivide(.clk(clk), .clkout(dividedClk));
-
+    divide#(100000) timeDivide(.clk(clk), .clkout(dividedClk400hz));
+    divide#(500) timeDivide2(.clk(clk), .clkout(dividedClk100hz));
     CPU mipsCPU(
-        .clk(dividedClk),
+        .clk(dividedClk100hz),
         .reset(BTNC),
         .addr_debug(SW[11:0]),
         .v_Syscall_out(ordinaryOutput),
@@ -62,10 +63,10 @@ module DisplaySwitch(
     );
 
     MUX4 statisticsSelect4(
-        .data1(totalCycles),
-        .data2(unconditionalBranchCount),
-        .data3(conditionalBranchCount),
-        .data4(conditionalBranchSuccessCount),
+        .data1({0, totalCycles}),
+        .data2({0, unconditionalBranchCount}),
+        .data3({0, conditionalBranchCount}),
+        .data4({0, conditionalBranchSuccessCount}),
         .sel(SW[1:0]),
         .dataout(statisticsOutput)
     );
@@ -80,30 +81,24 @@ module DisplaySwitch(
     );
 
     SegmentDisplay segmentDisplay(
-        .clk(dividedClk),
+        .clk(dividedClk400hz),
         .reset(BTNC),
         .number(outputNumber),
         .anodes(anodes),
         .cathodes(cathodes)
     );
-
-    always @ (posedge BTNC) begin
-        state = DisplayOrdinary;
-    end
-
-    always @ (posedge BTNU) begin
-        state = DisplayOrdinary;
-    end
-
-    always @ (posedge BTND) begin
-        state = DisplayMemory;
-    end
-
-    always @ (posedge BTNL) begin
-        state = DisplayPC;
-    end
-
-    always @ (posedge BTNR) begin
-        state = DisplayStatistics;
+    always @(posedge clk) begin
+    case({BTNC,BTNU,BTND,BTNL,BTNR})
+        5'b10000 : state = DisplayOrdinary;
+    
+        5'b01000 : state = DisplayOrdinary;
+    
+        5'b00100 : state = DisplayMemory;
+    
+        5'b00010 : state = DisplayPC;
+    
+        5'b00001 : state = DisplayStatistics;
+        default : state = DisplayOrdinary;
+    endcase
     end
 endmodule

@@ -33,17 +33,17 @@ module storage(
     assign dataout = data[address];
     assign r_dataout = data[r_address];
 	
-    reg [31:0]data[0:4095];
+    reg [31:0]data[0:63];
     integer i;
     initial 
     begin
-    for(i=0;i<=4095;i=i+1)
+    for(i=0;i<=63;i=i+1)
       data[i]=32'h00000000;
     end
     always 
-    @(posedge clk)begin
+    @(negedge clk)begin
     if(clr==1)
-       for(i=0;i<=4095;i=i+1)
+       for(i=0;i<=63;i=i+1)
          data[i]=32'h00000000;
     if(str==1'b1)data[address]=datain;
     end

@@ -26,15 +26,15 @@ module divide(
     input clk;
     output reg clkout;
     reg [31:0] count;
-    parameter N = 100000;
+    
+    parameter n = 250000;
     initial
     begin 
         count = 32'd0;
-        clkout = 0;
     end
     always@(posedge clk)
     begin
-        if(count == N)
+        if(count == n)
         begin
             clkout = ~clkout;
             count = 0;

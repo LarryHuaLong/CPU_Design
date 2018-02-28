@@ -46,7 +46,6 @@ module SegmentDisplay(
     reg [3:0] digit;
     reg [4:0] base;
     reg [2:0] counter;
-    reg [31:0] number;
 
     always @ (posedge clk) begin
         if (reset == 1) begin

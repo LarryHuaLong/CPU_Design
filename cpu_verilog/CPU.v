@@ -82,7 +82,7 @@ module CPU(
 	wire [4:0]RF_in_rB;
 	wire [31:0]ALU_in_X;
 	wire [31:0]ALU_in_Y;
-	wire [31:0]ALU_in_S;
+	wire [3:0]ALU_in_S;
 	wire [31:0]DM_in_data;
 	wire [11:0]DM_in_addr;
 	wire [16:0]extender_in;
@@ -92,9 +92,9 @@ module CPU(
 	wire [31:0]IM_out;
 	wire [5:0]OP;
 	wire [5:0]Funct;
-	wire [4:0]IM_rs;
-	wire [4:0]IM_rd;
-	wire [4:0]IM_rt;
+	wire [4:0]rs;
+	wire [4:0]rd;
+	wire [4:0]rt;
 	wire [4:0]IM_shamt;
 	wire [15:0]IM_IMM;
 	wire [31:0]RF_A;
@@ -112,17 +112,18 @@ module CPU(
 	initial PC = 0;
 	always @(posedge clk)
 		if(reset)
-				PC <= 0;
+			PC <= 0;
 		else if(!halt)
 			PC <= PC_in;
-			
+	wire [31:0]branch_addr;
+	assign branch_addr = PC_plus_1 + {extender_out[29:0],2'b00};
 	assign PC_in = jump ? (jump_register ? RF_A : {PC_plus_1[31:28],IM_out[25:0],2'b00} )
-						: (branch ? (PC_plus_1 + {extender_out[29:0],2'b00}) : PC_plus_1);
+						: (branch ? branch_addr : PC_plus_1);
     assign v_PC = PC;
 	//数码管锁�?
-	reg Syscallout;
+	reg [31:0]Syscallout;
 	initial Syscallout = 0;
-	always @(posedge clk)
+	always @(negedge clk)
 		if(reset) 
 			Syscallout = 0;
 		else if(display_a0)
@@ -132,8 +133,8 @@ module CPU(
 	//PC加一
 	assign PC_plus_1 = PC + 4;
 	//指令寄存�?
-	ins_storage IM(.address(IM_in),
-				   .dataout(IM_out));
+	IM_Storage IM(.Address(IM_in),
+				   .Data(IM_out));
 	assign IM_in = PC[11:2];
 	assign OP = IM_out[31:26];
 	assign Funct = IM_out[5:0];
@@ -179,7 +180,7 @@ module CPU(
 			   .datain(DM_in_data),
 			   .clk(clk),
 			   .str(DM_WE),
-			   .ld(),
+			   .ld(1'b1),
 			   .dataout(DM_out),
 			   .r_dataout(v_memory_out),
 			   .clr());
@@ -194,10 +195,12 @@ module CPU(
     assign branch = (ALU_Equal & beq) | (!ALU_Equal & bne) | (bltz & ALU_Result[0]); 
     assign display_a0 = syscall & !ALU_Equal;
 	//指令统计
+	wire [15:0]total_cycle;
 	total_circle total(.clk(clk),
 					   .D(halt),
-					   .Q(v_total_cycles),
+					   .Q(total_cycle),
 					   .RST(reset));
+    assign v_total_cycles = total_cycle + {15'b0,halt};			   
 	other_cilcle jump_cycles(.clk(clk),
 							 .D(!jump & !jump_register),
 							 .Q(v_jump_cycles),

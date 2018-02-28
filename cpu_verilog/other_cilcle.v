@@ -31,7 +31,7 @@ module other_cilcle(
              Q=0;
              notQ=0;
              end
-             always @(posedge clk)
+             always @(negedge clk)
              begin
              if(RST==1)begin
              notQ=0;
