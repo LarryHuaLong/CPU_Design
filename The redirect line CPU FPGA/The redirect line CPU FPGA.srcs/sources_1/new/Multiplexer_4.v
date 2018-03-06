@@ -1,5 +1,5 @@
 `timescale 1ns / 1ps
-module Multiplexer(sel,
+module Multiplexer_4(sel,
 			data1,
 			data2,
 			data3,

@@ -1,5 +1,4 @@
 `timescale 1ns / 1ps
-
 //
 // [Conventions]
 //     BTNU: ordinary output.
@@ -11,8 +10,6 @@
 //         SW[1:0] 2'b01 : unconditional branch count.
 //         SW[1:0] 2'b10 : conditional branch count.
 //         SW[1:0] 2'b11 : conditional branch success count.
-
-
 module Dashboard(
     input clk,
     input BTNC,

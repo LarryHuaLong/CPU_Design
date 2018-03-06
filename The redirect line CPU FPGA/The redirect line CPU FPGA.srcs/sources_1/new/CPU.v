@@ -2,14 +2,14 @@
 module CPU(
     input clk,
     input reset,
-	input [11:0]addr_debug,
+	input [11:0]debug_addr,
     output [31:0] v_Syscall_out,
-    output [31:0] v_PC,
+    output [31:0] v_PC_debug,
     output [31:0] v_memory_out,
     output [15:0] v_total_cycles,
     output [15:0] v_jump_cycles,
-    output [15:0] v_branch_cycles,
-    output [15:0] v_branch_sucess_cycles
+    output [15:0] v_branch_sucess_cycles,
+	output [15:0] v_load_use_times
     );
 		
     //控制信号定义
@@ -119,7 +119,7 @@ module CPU(
 	assign branch_addr = PC_plus_1 + {extender_out[29:0],2'b00};
 	assign PC_in = jump ? (jump_register ? RF_A : {PC_plus_1[31:28],IM_out[25:0],2'b00} )
 						: (branch ? branch_addr : PC_plus_1);
-    assign v_PC = PC;
+    assign PC_debug = PC;
 	//数码管锁孿
 	reg [31:0]Syscallout;
 	initial Syscallout = 0;
@@ -175,7 +175,7 @@ module CPU(
 								 : (RF_A_to_Y ? RF_A : RF_B) ;
 	assign ALU_in_S = ALUOP;
 	//数据存储噿
-	storage DM(.r_address(addr_debug),
+	storage DM(.r_address(debug_addr),
 			   .address(DM_in_addr),
 			   .datain(DM_in_data),
 			   .clk(clk),

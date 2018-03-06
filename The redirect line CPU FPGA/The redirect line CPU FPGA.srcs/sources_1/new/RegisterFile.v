@@ -1,13 +1,13 @@
 `timescale 1ns / 1ps
-module register(clk,
-				rst,
-				Reg1No,
-				Reg2No,
-				Din,
-				WriteRegNo,
-				WriteEnable,
-				Reg1,
-				Reg2);
+module RegisterFile(clk,
+					rst,
+					Reg1No,
+					Reg2No,
+					Din,
+					WriteRegNo,
+					WriteEnable,
+					Reg1,
+					Reg2);
    input clk;
    input rst;
    input [4:0] Reg1No;
