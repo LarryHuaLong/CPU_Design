@@ -1,0 +1,35 @@
+#-----------------------------------------------------------
+# Vivado v2015.2 (64-bit)
+# SW Build 1266856 on Fri Jun 26 16:35:25 MDT 2015
+# IP Build 1264090 on Wed Jun 24 14:22:01 MDT 2015
+# Start of session at: Wed Mar 07 18:35:46 2018
+# Process ID: 1504
+# Log file: E:/CPU_Design/The_redirect_line_CPU_FPGA/vivado.log
+# Journal file: E:/CPU_Design/The_redirect_line_CPU_FPGA\vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project E:/CPU_Design/The_redirect_line_CPU_FPGA/The_redirect_line_CPU_FPGA.xpr
+launch_simulation
+open_wave_config E:/CPU_Design/The_redirect_line_CPU_FPGA/CPU_tb_behav.wcfg
+source CPU_tb.tcl
+run all
+add_wave {{/CPU_tb/cpu/registers/regs}} 
+add_wave {{/CPU_tb/cpu/MEMtoWB/WB_rW}} 
+add_wave {{/CPU_tb/cpu/WB_RF_W}} 
+restart
+run all
+save_wave_config {E:/CPU_Design/The_redirect_line_CPU_FPGA/CPU_tb_behav.wcfg}
+add_wave {{/CPU_tb/cpu/ID_CTRL}} 
+restart
+run all
+restart
+run 9 ns
+run 1 ns
+run 1 ns
+restart
+save_wave_config {E:/CPU_Design/The_redirect_line_CPU_FPGA/CPU_tb_behav.wcfg}
+close_sim
+launch_simulation
+open_wave_config E:/CPU_Design/The_redirect_line_CPU_FPGA/CPU_tb_behav.wcfg
+source CPU_tb.tcl
+close_sim

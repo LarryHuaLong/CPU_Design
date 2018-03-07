@@ -3,7 +3,7 @@
 <!--                                                         -->
 <!-- Copyright 1986-2015 Xilinx, Inc. All Rights Reserved.   -->
 
-<Project Version="7" Minor="5" Path="D:/CPU_Design/The_redirect_line_CPU_FPGA/The_redirect_line_CPU_FPGA.xpr">
+<Project Version="7" Minor="5" Path="E:/CPU_Design/The_redirect_line_CPU_FPGA/The_redirect_line_CPU_FPGA.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
     <Option Name="Id" Val="8ca422ea9ee94c578e8b0d941dafd25f"/>

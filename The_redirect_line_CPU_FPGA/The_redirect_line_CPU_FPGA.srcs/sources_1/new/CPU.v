@@ -277,9 +277,9 @@ module CPU(
 	assign halfword = !MEM_ALU_R[1] ? {16'h0000,MEM_DM_D[15:0]} 
 									: {16'h0000,MEM_DM_D[31:16]};
 	assign WB_RF_WE = WB_CTRL[23];
-	assign WB_RF_W = !WB_CTRL[21] ? (!WB_CTRL[22] ? MEM_ALU_R 
+	assign WB_RF_W = !WB_CTRL[21] ? (!WB_CTRL[22] ? WB_ALU_R 
 												  : WB_PC_PLUS_1)
-								  : (!WB_CTRL[20] ? MEM_DM_D
+								  : (!WB_CTRL[20] ? WB_DM_D
 												  : halfword);
 	assign halting = WB_HALT;
 	
