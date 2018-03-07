@@ -2,8 +2,7 @@
 	module Controller(
 		input[5:0] OP,
 		input[5:0] Funct,
-		output[31:0] control_signal
-	);
+		output[31:0] control_signal);
 	wire op0,bltz,j,jal,beq,bne,addi,addiu,slti,sltiu,andi,ori,lh,lw,sw;
 	wire f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,f14;
 	wire sll,srl,sra,srlv,jr,syscall,add,addu,sub,c_and,c_or,c_nor,slt,sltu;

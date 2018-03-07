@@ -1,9 +1,9 @@
 `timescale 1ns / 1ps
 module CPU(
     input clk,
-    input reset,
+    input RST,
 	input [11:0]debug_addr,
-    output [31:0] v_Syscall_out,
+    output [31:0] v_SyscallOut,
     output [31:0] v_PC_debug,
     output [31:0] v_memory_out,
     output [15:0] v_total_cycles,
@@ -11,207 +11,296 @@ module CPU(
     output [15:0] v_branch_sucess_cycles,
 	output [15:0] v_load_use_times
     );
-		
-    //控制信号定义
-    wire [27:0]control_signals;
-    wire [3:0]ALUOP;
 	
-    wire v0_to_rA;
-    wire a0_to_rB;
-    wire rd_to_rW;
-    wire GPR_to_rW;
+	//global tunnels
+	wire lock,halting,stop;
+	wire jump,branch,Load_Use;
+	///IF tunnels
+	wire goto;
+	wire[31:0]goto_addr;
+	///ID tunnels
+	wire WB_RF_WE;
+	wire[4:0]WB_rW;
+	wire[31:0]WB_RF_W;
+	wire[5:0]EX_OP;
+	wire[31:0]EX_Data;
+	wire EX_RF_WE;
+	wire[4:0]EX_rW;
+	wire[31:0]MEM_Data;
+	wire MEM_RF_WE;
+	wire[4:0]MEM_rW;
+	///EX tunnels
+	///MEM tunnels
+	///WB tunnels
 	
-    wire RF_WE;
-    wire PC_plus_1_to_Din;
-    wire DM_to_Din;
-    wire DM_half_to_Din;
+	//4 interfaces' IOs
+	wire[31:0]IF_PC;
+	wire[31:0]IF_PC_PLUS_1;
+	wire[31:0]IF_IR;
 	
-    wire RF_B_to_X;
-    wire RF_A_to_Y;
-    wire S_EXT_to_Y;
-	wire extend_shamt;
+	wire[31:0]ID_PC;
+	wire[31:0]ID_PC_PLUS_1;
+	wire[31:0]ID_IR;//
+
+	wire[31:0]ID_CTRL;
+	wire[31:0]ID_RF_B;
+	wire[4:0]ID_rW;
+	wire[31:0]ID_RF_A;
+	wire[31:0]ID_IMM;
 	
-	wire extend_IMM;
-	wire zero_ext_IMM;
-    wire jump;
-    wire jump_register;
+	wire[31:0]EX_PC;
+	wire[31:0]EX_PC_PLUS_1;
+	wire[31:0]EX_CTRL;
+	wire[4:0]EX_rW;
+	wire[31:0]EX_RF_B;
 	
-    wire beq;
-    wire bne;
-    wire bltz;
-	wire syscall;
+	wire[31:0]EX_ALU_R;
+	wire EX_HALT;
+	wire[31:0]EX_IR;
+	wire[31:0]EX_RF_A;
+	wire[31:0]EX_IMM;//
+
 	
-	wire DM_WE;
+	wire[31:0]MEM_PC;
+	wire[31:0]MEM_PC_PLUS_1;
+	wire[31:0]MEM_CTRL;
+	wire[4:0]MEM_rW;
+	wire[31:0]MEM_ALU_R;
+	wire MEM_HALT;//
 	
-	assign {ALUOP 
-			,v0_to_rA  
-			, a0_to_rB
-			, rd_to_rW
-			, GPR_to_rW
-			, RF_WE
-			, PC_plus_1_to_Din
-			, DM_to_Din
-			, DM_half_to_Din
-			, RF_B_to_X
-			, RF_A_to_Y
-			, S_EXT_to_Y
-			, extend_shamt
-			, extend_IMM
-			, zero_ext_IMM
-			, jump
-			, jump_register
-			, beq
-			, bne
-			, bltz
-			, syscall
-			, DM_WE} 
-			= control_signals[27:3];
+	wire[31:0]MEM_DM_D;
+	wire[31:0]MEM_RF_B;
 	
-    //辅助信号定义
-	wire halt;
-	wire branch;
-	wire display_a0;
+	wire[31:0]WB_PC;
+	wire[31:0]WB_PC_PLUS_1;
+	wire[31:0]WB_CTRL;
+	wire[4:0]WB_rW;
+	wire[31:0]WB_ALU_R;
+	wire WB_HALT;//
+	wire[31:0]WB_DM_D;
 	
+	assign lock = stop | (!goto&Load_Use);
+
+	IF_ID IFtoID( .clk(clk),
+				  .clear(goto),
+				  .lock(lock),
+				  .reset(RST),
+				  .IF_IR(IF_IR),
+				  .IF_PC(IF_PC),
+				  .IF_PC_plus_1(IF_PC_PLUS_1),
+				  .ID_IR(ID_IR),
+				  .ID_PC(ID_PC),
+				  .ID_PC_plus_1(ID_PC_PLUS_1));
+	ID_EX IDtoEX( .clk(clk),
+				  .clear(halting|goto|Load_Use),
+				  .lock(stop),
+				  .reset(RST),
+				  .ID_CTRL(ID_CTRL),
+				  .ID_IMM(ID_IMM),
+				  .ID_IR(ID_IR),
+				  .ID_PC(ID_PC),
+				  .ID_PC_plus_1(ID_PC_PLUS_1),
+				  .ID_RF_A(ID_RF_A),
+				  .ID_RF_B(ID_RF_B),
+				  .ID_rW(ID_rW),
+				  .EX_CTRL(EX_CTRL),
+				  .EX_IMM(EX_IMM),
+				  .EX_IR(EX_IR),
+				  .EX_PC(EX_PC),
+				  .EX_PC_plus_1(EX_PC_PLUS_1),
+				  .EX_RF_A(EX_RF_A),
+				  .EX_RF_B(EX_RF_B),
+				  .EX_rW(EX_rW));
+	EX_MEM EXtoMEM(.clk(clk),
+				   .clear(1'b0),
+				   .lock(1'b1),
+				   .reset(RST),
+				   .EX_ALU_R(EX_ALU_R),
+				   .EX_CTRL(EX_CTRL),
+				   .EX_HALT(EX_HALT),
+				   .EX_PC(EX_PC),
+				   .EX_PC_plus_1(EX_PC_PLUS_1),
+				   .EX_RF_B(EX_RF_B),
+				   .EX_rW(EX_rW),
+				   .MEM_ALU_R(MEM_ALU_R),
+				   .MEM_CTRL(MEM_CTRL),
+				   .MEM_HALT(MEM_HALT),
+				   .MEM_PC(MEM_PC),
+				   .MEM_PC_plus_1(MEM_PC_PLUS_1),
+				   .MEM_RF_B(MEM_RF_B),
+				   .MEM_rW(MEM_rW));
+	MEM_WB MEMtoWB(.clk(clk),
+				   .clear(1'b0),
+				   .lock(1'b1),
+				   .reset(RST),
+				   .MEM_ALU_R(MEM_ALU_R),
+				   .MEM_CTRL(MEM_CTRL),
+				   .MEM_DM_D(MEM_DM_D),
+				   .MEM_HALT(MEM_HALT),
+				   .MEM_PC(MEM_PC),
+				   .MEM_PC_plus_1(MEM_PC_PLUS_1),
+				   .MEM_rW(MEM_rW),
+				   .WB_ALU_R(WB_ALU_R),
+				   .WB_CTRL(WB_CTRL),
+				   .WB_DM_D(WB_DM_D),
+				   .WB_HALT(WB_HALT),
+				   .WB_PC(WB_PC),
+				   .WB_PC_plus_1(WB_PC_PLUS_1),
+				   .WB_rW(WB_rW));
+	//IF Section	   
+	wire[31:0]PC_in;
 	
-	//模块输入定义
-	wire [31:0]PC_in;
-	wire [11:0]IM_in;
-	wire [31:0]RF_in_w;
-	wire [4:0]RF_in_rW;
-	wire [4:0]RF_in_rA;
-	wire [4:0]RF_in_rB;
-	wire [31:0]ALU_in_X;
-	wire [31:0]ALU_in_Y;
-	wire [3:0]ALU_in_S;
-	wire [31:0]DM_in_data;
-	wire [11:0]DM_in_addr;
-	wire [16:0]extender_in;
-	
-	//模块输出定义
-	wire [31:0]PC_plus_1;
-	wire [31:0]IM_out;
-	wire [5:0]OP;
-	wire [5:0]Funct;
-	wire [4:0]rs;
-	wire [4:0]rd;
-	wire [4:0]rt;
-	wire [4:0]IM_shamt;
-	wire [15:0]IM_IMM;
-	wire [31:0]RF_A;
-	wire [31:0]RF_B;
-	wire [31:0]ALU_Result;
-	wire ALU_Equal;
-	wire [31:0]DM_out;
-	wire [31:0]extender_out;
-	
-	controller control(.OP(OP),.Funct(Funct),.control_signal(control_signals));
-	
-	
-	//PC寄存噿 
 	reg [31:0]PC;
 	initial PC = 0;
 	always @(posedge clk)
-		if(reset)
-			PC <= 0;
-		else if(!halt)
-			PC <= PC_in;
-	wire [31:0]branch_addr;
-	assign branch_addr = PC_plus_1 + {extender_out[29:0],2'b00};
-	assign PC_in = jump ? (jump_register ? RF_A : {PC_plus_1[31:28],IM_out[25:0],2'b00} )
-						: (branch ? branch_addr : PC_plus_1);
-    assign PC_debug = PC;
-	//数码管锁孿
-	reg [31:0]Syscallout;
-	initial Syscallout = 0;
-	always @(negedge clk)
-		if(reset) 
-			Syscallout = 0;
-		else if(display_a0)
-			Syscallout = RF_B;
-			
-	assign v_Syscall_out = Syscallout;
-	//PC加一
-	assign PC_plus_1 = PC + 4;
-	//指令寄存噿
-	IM_Storage IM(.Address(IM_in),
-				   .Data(IM_out));
-	assign IM_in = PC[11:2];
-	assign OP = IM_out[31:26];
-	assign Funct = IM_out[5:0];
-	assign rs = IM_out[25:21];
-	assign rt = IM_out[20:16];
-	assign rd = IM_out[15:11];
-	assign IM_shamt = IM_out[10:6];
-	assign IM_IMM = IM_out[15:0];
-	//寄存器堆
-	register RF(.rst(reset),
-				.Reg1No(RF_in_rA),
-				.Reg2No(RF_in_rB),
-				.WriteRegNo(RF_in_rW),
-				.Din(RF_in_w),
-				.WriteEnable(RF_WE),
-				.clk(clk),
-				.Reg1(RF_A),
-				.Reg2(RF_B));
-	assign RF_in_rW = GPR_to_rW ? 5'h1f
-								: (rd_to_rW ? rd : rt);
-	assign RF_in_rA = v0_to_rA ? 5'h02 : rs;
-	assign RF_in_rB = a0_to_rB ? 5'h04 : rt;
-	assign RF_in_w = DM_to_Din ? (DM_half_to_Din ? ( ALU_Result[1] ? {16'h0000,DM_out[31:16]} 
-																   : {16'h0000,DM_out[15:0]})
-												 : DM_out )
-							   : (PC_plus_1_to_Din ? PC_plus_1 : ALU_Result);
-	//ALU
-	ALU alu(.S(ALU_in_S),
-            .X(ALU_in_X),
-            .Y(ALU_in_Y),
-            .Result(ALU_Result),
-            .Result2(),
+		begin
+			if(RST)
+				PC <= 0;
+			else if(!lock)
+				PC <= PC_in;
+		end
+	assign PC_in = goto ? goto_addr : IF_PC_PLUS_1;
+	assign IF_PC = PC;
+	assign IF_PC_PLUS_1 = PC + 4;
+	ROM IM(.Address(PC[13:2]),.Data(IF_IR));
+	
+	//ID Section
+	wire[5:0]ID_OP;
+	wire[5:0]ID_Funct;
+	wire[4:0]ID_rs;
+	wire[4:0]ID_rt;
+	wire[4:0]ID_rd;
+	assign ID_OP = ID_IR[31:26];
+	assign ID_Funct = ID_IR[5:0];
+	assign ID_rs = ID_IR[25:21];
+	assign ID_rt = ID_IR[20:16];
+	assign ID_rd = ID_IR[15:11];
+	wire[4:0]ID_rA;
+	wire[4:0]ID_rB;
+	assign ID_rA = ID_CTRL[27] ? 5'h02 : ID_rs;
+	assign ID_rB = ID_CTRL[26] ? 5'h04 : ID_rt;
+	Extender externder(.IR(ID_IR),
+					   .extend_IMM(ID_CTRL[15]),
+					   .extend_shamt(ID_CTRL[16]),
+					   .zero_ext_IMM(ID_CTRL[14]),
+					   .IMM(ID_IMM));
+	Controller controller(.OP(ID_OP),
+						  .Funct(ID_Funct),
+						  .control_signal(ID_CTRL));
+	wire[31:0]RF_A;
+	wire[31:0]RF_B;
+	RegisterFile registers( .clk(clk),
+							.rst(RST),
+							.Reg1No(ID_rA),
+							.Reg2No(ID_rB),
+							.Din(WB_RF_W),
+							.WriteRegNo(WB_rW),
+							.WriteEnable(WB_RF_WE),
+							.Reg1(RF_A),
+							.Reg2(RF_B));
+	wire[31:0]rd_RF_A;
+	wire r_RF_A;
+	wire[31:0]rd_RF_B;
+	wire r_RF_B;
+	Redirector redirector( .Control_signals(ID_CTRL),
+						   .EX_Data(EX_Data),
+						   .EX_OP(EX_OP),
+						   .EX_RF_WE(EX_RF_WE),
+						   .EX_rW(EX_rW),
+						   .MEM_Data(MEM_Data),
+						   .MEM_RF_WE(MEM_RF_WE),
+						   .MEM_rW(MEM_rW),
+						   .rA(ID_rA),
+						   .rB(ID_rB),
+						   .Load_Use(Load_Use),
+						   .redirect_RF_A(r_RF_A),
+						   .redirect_RF_B(r_RF_B),
+						   .redirected_RF_A(rd_RF_A),
+						   .redirected_RF_B(rd_RF_B));
+	assign ID_RF_A = r_RF_A ? rd_RF_A : RF_A;
+	assign ID_RF_B = r_RF_B ? rd_RF_B : RF_B;
+	assign ID_rW = ID_CTRL[24] ? 5'b1f : (ID_CTRL[25] ? ID_rd : ID_rt);
+
+	//EX Section
+	wire syscall,ALU_Equal;
+	wire[3:0]ALU_OP;
+	wire[31:0]ALU_X;
+	wire[31:0]ALU_Y;
+	assign syscall = EX_CTRL[8];
+	assign ALU_OP = EX_CTRL[31:28];
+	assign ALU_X = EX_CTRL[19] ? EX_RF_B : EX_RF_A;
+	assign ALU_y = EX_CTRL[17] ? EX_IMM : (EX_CTRL[18] ? EX_RF_A : EX_RF_B);
+	ALU alu(.S(ALU_OP),
+            .X(ALU_X),
+            .Y(ALU_Y),
+            .Result(),
+            .Result2(EX_ALU_R),
             .Equal(ALU_Equal),
             .Overflow(),
-            .UOF());
-	assign ALU_in_X = RF_B_to_X ? RF_B : RF_A;
-	assign ALU_in_Y = S_EXT_to_Y ? extender_out 
-								 : (RF_A_to_Y ? RF_A : RF_B) ;
-	assign ALU_in_S = ALUOP;
-	//数据存储噿
-	storage DM(.r_address(debug_addr),
-			   .address(DM_in_addr),
-			   .datain(DM_in_data),
-			   .clk(clk),
-			   .str(DM_WE),
-			   .ld(1'b1),
-			   .dataout(DM_out),
-			   .r_dataout(v_memory_out),
-			   .clr());
-	assign DM_in_data = RF_B;
-	assign DM_in_addr = ALU_Result[13:2];
+            UOF());
+	NPC npc(.ALU_Equal(ALU_Equal),
+            .ALU_R(EX_ALU_R),
+            .CTRL(EX_CTRL),
+            .IMM(EX_IMM),
+            .IR(EX_IR),
+            .PC_plus_1(EX_PC_PLUS_1),
+            .RF_A(EX_RF_A),
+            .branch(branch),
+            .goto(goto),
+            .jump,(jump)
+            .new_addr(goto_addr));
+	assign EX_HALT = syscall&ALU_Equal;
+	assign EX_OP = EX_IR[31:26];
+	assign EX_Data = EX_ALU_R;
+	assign EX_RF_WE = EX_CTRL[23];
 	
-	assign extender_out = extender_in[16] ? {16'hffff,extender_in[15:0]} : {16'h0000,extender_in[15:0]};
-    assign extender_in = extend_IMM ? (zero_ext_IMM ? {1'b0,IM_IMM} : {IM_IMM[15],IM_IMM})
-									: (extend_shamt ? {12'h000,IM_shamt} : 17'h0000a);
-	//
-	assign halt = syscall & ALU_Equal;
-    assign branch = (ALU_Equal & beq) | (!ALU_Equal & bne) | (bltz & ALU_Result[0]); 
-    assign display_a0 = syscall & !ALU_Equal;
-	//指令统计
-	wire [15:0]total_cycle;
-	total_circle total(.clk(clk),
-					   .D(halt),
-					   .Q(total_cycle),
-					   .RST(reset));
-    assign v_total_cycles = total_cycle + {15'b0,halt};			   
-	other_cilcle jump_cycles(.clk(clk),
-							 .D(!jump & !jump_register),
-							 .Q(v_jump_cycles),
-							 .RST(reset));
-	other_cilcle branch_cycles(.clk(clk),
-							  .D(!beq & !bne & !bltz),
-							  .Q(v_branch_cycles),
-							  .RST(reset));
-	other_cilcle branch_sucess_cycles(.clk(clk),
-									  .D(!branch),
-									  .Q(v_branch_sucess_cycles),
-									  .RST(reset));
+	reg [31:0]SyscallOut;
+	initial SyscallOut = 0;
+	always @(negedge clk)
+		begin
+			if(RST)
+				SyscallOut <= 0;
+			else if(!ALU_Equal&syscall)
+				SyscallOut <= PC_in;
+		end
+	
+	//MEM Section
+	assign MEM_RF_WE = MEM_CTRL[23];
+	assign MEM_Data = (MEM_CTRL[21] | MEM_CTRL[20]) ? MEM_DM_D : MEM_ALU_R;
+	RAM DM( .clk(clk),
+		    .clr(RST),
+		    .str(MEM_CTRL[7]),
+		    .datain(MEM_RF_B),
+		    .address(MEM_ALU_R[13:2]),
+		    .dataout(MEM_DM_D),
+		    .debug_address(debug_addr),
+		    .debug_dataout(v_memory_out));
+	
+	//WB Section
+	wire[31:0]halfword;
+	assign halfword = !MEM_ALU_R[1] ? {16'h0000,MEM_DM_D[15:0]} 
+									: {16'h0000,MEM_DM_D[31:16]}
+	assign WB_RF_WE = WB_CTRL[23];
+	assign WB_RF_W = !WB_CTRL[21] ? (!WB_CTRL[22] ? MEM_ALU_R 
+												  : MEM_PC_PLUS_1)
+								  : (!WB_CTRL[20] ? MEM_DM_D
+												  : halfword);
+	assign halting = WB_HALT;
+	
+	reg halt;
+	initial halt = 0;
+	always@(negedge clk)
+		begin
+			if(RST)
+				SyscallOut <= 0;
+			else if(!ALU_Equal&syscall)
+				SyscallOut <= PC_in;
 	
 endmodule
+
+
+
+
+
+
+

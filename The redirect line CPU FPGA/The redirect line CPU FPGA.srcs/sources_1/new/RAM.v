@@ -1,12 +1,11 @@
 module RAM(clk,
-			   clr,
-			   str,
-			   datainaddress,
-			   address,
-			   dataout,
-			   debug_address,
-			   debug_dataout,
-);
+		   clr,
+		   str,
+		   datain,
+		   address,
+		   dataout,
+		   debug_address,
+		   debug_dataout);
 	input [11:0]debug_address;
     input [11:0]address;
     input [31:0]datain;
