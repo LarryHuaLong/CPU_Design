@@ -51,7 +51,7 @@ module CPU_tb;
     initial #5 RST  = 0;
     initial begin 
         debug_addr = 0;
-        #8000 
+        #5000 
         # 20 debug_addr = 0;
         # 20 debug_addr = 1;
         # 20 debug_addr = 2;

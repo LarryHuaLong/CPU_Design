@@ -2,23 +2,109 @@
 # Vivado v2015.2 (64-bit)
 # SW Build 1266856 on Fri Jun 26 16:35:25 MDT 2015
 # IP Build 1264090 on Wed Jun 24 14:22:01 MDT 2015
-# Start of session at: Wed Mar 07 19:50:01 2018
-# Process ID: 3700
-# Log file: C:/Users/LXP/Desktop/CPU_Design/The_redirect_line_CPU_FPGA/vivado.log
-# Journal file: C:/Users/LXP/Desktop/CPU_Design/The_redirect_line_CPU_FPGA\vivado.jou
+# Start of session at: Wed Mar 07 20:12:12 2018
+# Process ID: 3040
+# Log file: E:/CPU_Design/The_redirect_line_CPU_FPGA/vivado.log
+# Journal file: E:/CPU_Design/The_redirect_line_CPU_FPGA\vivado.jou
 #-----------------------------------------------------------
 start_gui
-open_project C:/Users/LXP/Desktop/CPU_Design/The_redirect_line_CPU_FPGA/The_redirect_line_CPU_FPGA.xpr
+open_project E:/CPU_Design/The_redirect_line_CPU_FPGA/The_redirect_line_CPU_FPGA.xpr
 launch_simulation
-open_wave_config C:/Users/LXP/Desktop/CPU_Design/The_redirect_line_CPU_FPGA/CPU_tb_behav.wcfg
+open_wave_config E:/CPU_Design/The_redirect_line_CPU_FPGA/CPU_tb_behav.wcfg
 source CPU_tb.tcl
 run all
-launch_runs synth_1
-wait_on_run synth_1
-launch_runs impl_1
-wait_on_run impl_1
-launch_simulation -mode post-synthesis -type functional
-open_wave_config C:/Users/LXP/Desktop/CPU_Design/The_redirect_line_CPU_FPGA/CPU_tb_behav.wcfg
+add_files -fileset constrs_1 -norecurse E:/logisim-evolution/cpu_redirect_FPGA/TEST/verilog/cpu_verilog/Nexys4DDR_Master.xdc
+import_files -fileset constrs_1 E:/logisim-evolution/cpu_redirect_FPGA/TEST/verilog/cpu_verilog/Nexys4DDR_Master.xdc
+import_files
+create_wave_config; add_wave /; set_property needs_save false [current_wave_config]
+close_sim
+launch_simulation
+open_wave_config E:/CPU_Design/The_redirect_line_CPU_FPGA/CPU_tb_behav.wcfg
 source CPU_tb.tcl
+run all
+save_wave_config {E:/CPU_Design/The_redirect_line_CPU_FPGA/CPU_tb_behav.wcfg}
+run 100 ns
+# Disabling source management mode.  This is to allow the top design properties to be set without GUI intervention.
+set_property source_mgmt_mode None [current_project]
+set_property top Dashboard [current_fileset]
+# Re-enabling previously disabled source management mode.
+set_property source_mgmt_mode All [current_project]
+update_compile_order -fileset sources_1
+set_property SOURCE_SET sources_1 [get_filesets sim_1]
+close [ open E:/CPU_Design/The_redirect_line_CPU_FPGA/The_redirect_line_CPU_FPGA.srcs/sim_1/new/Dashboard_tb.v w ]
+add_files -fileset sim_1 E:/CPU_Design/The_redirect_line_CPU_FPGA/The_redirect_line_CPU_FPGA.srcs/sim_1/new/Dashboard_tb.v
+update_compile_order -fileset sim_1
+# Disabling source management mode.  This is to allow the top design properties to be set without GUI intervention.
+set_property source_mgmt_mode None [current_project]
+set_property top Dashboard_tb [get_filesets sim_1]
+set_property top_lib xil_defaultlib [get_filesets sim_1]
+# Re-enabling previously disabled source management mode.
+set_property source_mgmt_mode All [current_project]
+update_compile_order -fileset sim_1
+launch_simulation
+open_wave_config E:/CPU_Design/The_redirect_line_CPU_FPGA/CPU_tb_behav.wcfg
+source Dashboard_tb.tcl
+run all
+create_wave_config; add_wave /; set_property needs_save false [current_wave_config]
 restart
 run all
+restart
+run all
+add_wave {{/Dashboard_tb/dashboard/mipsCPU/v_total_cycles}} 
+restart
+run all
+run 100 ns
+run 100 ns
+run all
+add_wave {{/Dashboard_tb/dashboard/mipsCPU/clk}} 
+add_wave {{/Dashboard_tb/dashboard/timeDivide2/clkout}} 
+add_wave {{/Dashboard_tb/dashboard/timeDivide/clkout}} 
+restart
+run all
+save_wave_config {E:/CPU_Design/The_redirect_line_CPU_FPGA/Dashboard_tb_behav.wcfg}
+add_files -fileset sim_1 -norecurse E:/CPU_Design/The_redirect_line_CPU_FPGA/Dashboard_tb_behav.wcfg
+set_property xsim.view {E:/CPU_Design/The_redirect_line_CPU_FPGA/IF_ID_tb_behav.wcfg E:/CPU_Design/The_redirect_line_CPU_FPGA/CPU_tb_behav.wcfg E:/CPU_Design/The_redirect_line_CPU_FPGA/Dashboard_tb_behav.wcfg} [get_filesets sim_1]
+close_sim
+launch_simulation
+open_wave_config E:/CPU_Design/The_redirect_line_CPU_FPGA/CPU_tb_behav.wcfg
+open_wave_config E:/CPU_Design/The_redirect_line_CPU_FPGA/Dashboard_tb_behav.wcfg
+source Dashboard_tb.tcl
+run 10 ns
+close_sim
+launch_simulation
+open_wave_config E:/CPU_Design/The_redirect_line_CPU_FPGA/CPU_tb_behav.wcfg
+open_wave_config E:/CPU_Design/The_redirect_line_CPU_FPGA/Dashboard_tb_behav.wcfg
+source Dashboard_tb.tcl
+run all
+close_sim
+launch_simulation
+open_wave_config E:/CPU_Design/The_redirect_line_CPU_FPGA/CPU_tb_behav.wcfg
+open_wave_config E:/CPU_Design/The_redirect_line_CPU_FPGA/Dashboard_tb_behav.wcfg
+source Dashboard_tb.tcl
+run 20 us
+run 5 us
+run 500 ns
+run 500 ns
+run 500 ns
+run 500 ns
+run 500 ns
+run 500 ns
+save_wave_config {E:/CPU_Design/The_redirect_line_CPU_FPGA/Dashboard_tb_behav.wcfg}
+close_sim
+launch_simulation
+# Disabling source management mode.  This is to allow the top design properties to be set without GUI intervention.
+set_property source_mgmt_mode None [current_project]
+set_property top CPU_tb [get_filesets sim_1]
+set_property top_lib xil_defaultlib [get_filesets sim_1]
+# Re-enabling previously disabled source management mode.
+set_property source_mgmt_mode All [current_project]
+update_compile_order -fileset sim_1
+close_sim
+launch_simulation
+open_wave_config E:/CPU_Design/The_redirect_line_CPU_FPGA/CPU_tb_behav.wcfg
+open_wave_config E:/CPU_Design/The_redirect_line_CPU_FPGA/Dashboard_tb_behav.wcfg
+source CPU_tb.tcl
+run all
+restart
+run all
+close_sim

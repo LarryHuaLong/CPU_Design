@@ -10,7 +10,7 @@
          </top_modules>
       </db_ref>
    </db_ref_list>
-   <WVObjectSize size="39" />
+   <WVObjectSize size="41" />
    <wvobject db_ref_id="1" fp_name="/CPU_tb/clk" type="logic">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
@@ -27,6 +27,16 @@
    <wvobject db_ref_id="1" fp_name="/CPU_tb/cpu/IDtoEX/ID_PC" type="array">
       <obj_property name="ElementShortName">ID_PC[31:0]</obj_property>
       <obj_property name="ObjectShortName">ID_PC[31:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/CPU_tb/cpu/ID_IR" type="array">
+      <obj_property name="ElementShortName">ID_IR[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ID_IR[31:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/CPU_tb/cpu/ID_CTRL" type="array">
+      <obj_property name="ElementShortName">ID_CTRL[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ID_CTRL[31:0]</obj_property>
       <obj_property name="Radix">HEXRADIX</obj_property>
    </wvobject>
    <wvobject db_ref_id="1" fp_name="/CPU_tb/cpu/EXtoMEM/EX_PC" type="array">

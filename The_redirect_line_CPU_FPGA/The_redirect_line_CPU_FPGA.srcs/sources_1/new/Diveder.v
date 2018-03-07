@@ -8,9 +8,8 @@ module Divider(clk,
     
     parameter n = 250000;
 	
-    initial
-        count = 32'd0;
-		
+    initial count = 32'd0;
+	initial clkout = 0;
     always@(posedge clk)
     begin
         if(count == n)

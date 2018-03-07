@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="Dashboard_tb_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="Dashboard_tb" />
+            <top_module name="glbl" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="19" />
+   <wvobject db_ref_id="1" fp_name="/Dashboard_tb/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Dashboard_tb/BTNC" type="logic">
+      <obj_property name="ElementShortName">BTNC</obj_property>
+      <obj_property name="ObjectShortName">BTNC</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Dashboard_tb/BTNU" type="logic">
+      <obj_property name="ElementShortName">BTNU</obj_property>
+      <obj_property name="ObjectShortName">BTNU</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Dashboard_tb/BTND" type="logic">
+      <obj_property name="ElementShortName">BTND</obj_property>
+      <obj_property name="ObjectShortName">BTND</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Dashboard_tb/BTNL" type="logic">
+      <obj_property name="ElementShortName">BTNL</obj_property>
+      <obj_property name="ObjectShortName">BTNL</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Dashboard_tb/BTNR" type="logic">
+      <obj_property name="ElementShortName">BTNR</obj_property>
+      <obj_property name="ObjectShortName">BTNR</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Dashboard_tb/SW" type="array">
+      <obj_property name="ElementShortName">SW[15:0]</obj_property>
+      <obj_property name="ObjectShortName">SW[15:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Dashboard_tb/anodes" type="array">
+      <obj_property name="ElementShortName">anodes[7:0]</obj_property>
+      <obj_property name="ObjectShortName">anodes[7:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Dashboard_tb/cathodes" type="array">
+      <obj_property name="ElementShortName">cathodes[7:0]</obj_property>
+      <obj_property name="ObjectShortName">cathodes[7:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Dashboard_tb/dashboard/displaySelect4/data1" type="array">
+      <obj_property name="ElementShortName">data1[31:0]</obj_property>
+      <obj_property name="ObjectShortName">data1[31:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Dashboard_tb/dashboard/displaySelect4/data2" type="array">
+      <obj_property name="ElementShortName">data2[31:0]</obj_property>
+      <obj_property name="ObjectShortName">data2[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Dashboard_tb/dashboard/displaySelect4/data3" type="array">
+      <obj_property name="ElementShortName">data3[31:0]</obj_property>
+      <obj_property name="ObjectShortName">data3[31:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Dashboard_tb/dashboard/displaySelect4/data4" type="array">
+      <obj_property name="ElementShortName">data4[31:0]</obj_property>
+      <obj_property name="ObjectShortName">data4[31:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Dashboard_tb/dashboard/displaySelect4/sel" type="array">
+      <obj_property name="ElementShortName">sel[1:0]</obj_property>
+      <obj_property name="ObjectShortName">sel[1:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Dashboard_tb/dashboard/displaySelect4/dataout" type="array">
+      <obj_property name="ElementShortName">dataout[31:0]</obj_property>
+      <obj_property name="ObjectShortName">dataout[31:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Dashboard_tb/dashboard/mipsCPU/v_total_cycles" type="array">
+      <obj_property name="ElementShortName">v_total_cycles[15:0]</obj_property>
+      <obj_property name="ObjectShortName">v_total_cycles[15:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Dashboard_tb/dashboard/mipsCPU/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Dashboard_tb/dashboard/timeDivide2/clkout" type="logic">
+      <obj_property name="ElementShortName">clkout</obj_property>
+      <obj_property name="ObjectShortName">clkout</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/Dashboard_tb/dashboard/timeDivide/clkout" type="logic">
+      <obj_property name="ElementShortName">clkout</obj_property>
+      <obj_property name="ObjectShortName">clkout</obj_property>
+   </wvobject>
+</wave_config>
