@@ -2,6 +2,3 @@ The_redirect_line_CPU_FPGA/The_redirect_line_CPU_FPGA.sim
 The_redirect_line_CPU_FPGA/The_redirect_line_CPU_FPGA.cache
 The_redirect_line_CPU_FPGA/The_redirect_line_CPU_FPGA.hw
 The_redirect_line_CPU_FPGA/The_redirect_line_CPU_FPGA.runs
-*.log
-
-*.jou

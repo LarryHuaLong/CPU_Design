@@ -27,7 +27,7 @@ module Dashboard_tb;
     always # 1 clk = ~clk;
     initial begin
         #10 BTNC = 0;
-        #80000
+        #30000
         BTNL = 1;
         #10 BTNL = 0;
         #10 BTNR = 1;

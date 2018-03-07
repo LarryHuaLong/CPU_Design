@@ -306,21 +306,26 @@ module CPU(
         branch_succeed_num = 0;
         Load_Use_num = 0;
 	end
-	always@(posedge clk)
+	always@(negedge clk)
            begin
                if(RST) count_total = 0;
                else count_total = stop;
            end
-	always@(negedge clk)
+	always@(posedge clk)
+	   begin
+	       if(RST)
+               total_num = 0;
+           if(!count_total&!RST) 
+               total_num = total_num + 1;
+	   end
+	   always@(negedge clk)
 	   begin
 	       if(RST)
                begin
-                   total_num = 0;
                    jump_num = 0;
                    branch_succeed_num = 0;
                    Load_Use_num = 0;
                end
-           if(!count_total&!RST) total_num = total_num + 1;
            if(jump) jump_num = jump_num + 1;
            if(branch) branch_succeed_num = branch_succeed_num + 1;
            if(Load_Use) Load_Use_num = Load_Use_num + 1;
