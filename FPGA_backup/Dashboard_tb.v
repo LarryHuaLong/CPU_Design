@@ -1,4 +1,4 @@
-`timescale 1ns/1ps
+`timescale 10ns/1ns
 module Dashboard_tb;
     reg clk;
     reg BTNC,BTNU,BTND,BTNL,BTNR;
@@ -53,6 +53,9 @@ module Dashboard_tb;
         #10 SW = 14; 
         #10 SW = 15; 
         #10 BTND = 0; 
+        #100 BTNC = 1;
+        #100 BTNC = 0;
+       #1000
         $finish;
     end
         

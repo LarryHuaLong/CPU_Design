@@ -283,13 +283,21 @@ module CPU(
 												  : halfword);
 	assign halting = WB_HALT;
 	
-	reg halt;
+	reg halt,last_halting;
 	initial halt = 0;
-	always@(negedge halting)
+	initial last_halting = 0;
+	always@(negedge clk)
+		begin
+			if(RST)
+				last_halting <= 0;
+			else 
+				last_halting = halting;
+		end
+	always@(negedge clk)
 		begin
 			if(RST)
 				halt <= 0;
-			else 
+			else if(last_halting)
 				halt = 1;
 		end
 	assign stop = halt;
@@ -306,16 +314,16 @@ module CPU(
         branch_succeed_num = 0;
         Load_Use_num = 0;
 	end
-	always@(negedge clk)
-           begin
-               if(RST) count_total = 0;
-               else count_total = stop;
-           end
+	//always@(negedge clk)
+    //       begin
+    ////           if(RST) count_total = 0;
+    //           else count_total = stop;
+    //       end
 	always@(posedge clk)
 	   begin
 	       if(RST)
                total_num = 0;
-           if(!count_total&!RST) 
+           if(!stop&!RST) 
                total_num = total_num + 1;
 	   end
 	   always@(negedge clk)
