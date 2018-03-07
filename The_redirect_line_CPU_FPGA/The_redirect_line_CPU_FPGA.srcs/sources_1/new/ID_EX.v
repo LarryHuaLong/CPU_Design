@@ -56,7 +56,16 @@ module ID_EX( clk,
    assign EX_RF_A = reg_EX_RF_A;
    assign EX_RF_B = reg_EX_RF_B;
    assign EX_rW = reg_EX_rW;
-   
+   initial begin
+       reg_EX_CTRL <= 0;
+       reg_EX_IMM <= 0;
+       reg_EX_IR <= 0;
+       reg_EX_PC <= 0;
+       reg_EX_PC_plus_1 <= 0;
+       reg_EX_RF_A <= 0;
+       reg_EX_RF_B <= 0;
+       reg_EX_rW <= 0;
+   end
    always@(posedge clk)
 	if(reset || lock&&clear)
 		begin

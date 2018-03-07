@@ -36,13 +36,28 @@ module EX_MEM( clk,
    output[4:0] MEM_rW;
    
    reg[31:0] reg_MEM_ALU_R;
-   reg[31:0] reg_EX_IR;
+   reg[31:0] reg_MEM_CTRL;
    reg reg_MEM_HALT;
    reg[31:0] reg_MEM_PC;
    reg[31:0] reg_MEM_PC_plus_1;
    reg[31:0] reg_MEM_RF_B;
    reg[4:0] reg_MEM_rW;
-   
+   assign MEM_ALU_R = reg_MEM_ALU_R;
+   assign MEM_CTRL = reg_MEM_CTRL;
+   assign MEM_HALT = reg_MEM_HALT;
+   assign MEM_PC = reg_MEM_PC;
+   assign MEM_PC_plus_1 = reg_MEM_PC_plus_1;
+   assign MEM_RF_B = reg_MEM_RF_B;
+   assign MEM_rW = reg_MEM_rW;
+   initial begin
+       reg_MEM_ALU_R <= 0;
+       reg_MEM_CTRL <= 0;
+       reg_MEM_HALT <= 0;
+       reg_MEM_PC <= 0;
+       reg_MEM_PC_plus_1 <= 0;
+       reg_MEM_RF_B <= 0;
+       reg_MEM_rW <= 0;
+   end
    always@(posedge clk)
 	if(reset || lock&&clear)
 		begin

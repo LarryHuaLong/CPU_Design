@@ -26,6 +26,12 @@ module IF_ID( clk,
    assign ID_PC = reg_ID_PC;
    assign ID_PC_plus_1 = reg_ID_PC_plus_1;
    
+   initial
+    begin
+        reg_ID_IR = 0;
+        reg_ID_PC = 0;
+        reg_ID_PC_plus_1 = 0;
+    end
    always@(posedge clk)
 	if(reset || lock&&clear)
 		begin

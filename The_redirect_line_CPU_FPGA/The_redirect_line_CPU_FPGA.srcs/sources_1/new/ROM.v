@@ -1,6 +1,6 @@
 module ROM(Address,
 				  Data);
-	input[11:0]  Address;
+	input[9:0]  Address;
 	output[31:0] Data;
 	reg[31:0] Data;
 	always @ (Address)

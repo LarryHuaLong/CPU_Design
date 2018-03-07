@@ -42,7 +42,23 @@ module MEM_WB( clk,
    reg[31:0] reg_WB_PC;
    reg[31:0] reg_WB_PC_plus_1;
    reg[4:0] reg_WB_rW;
-
+    
+   assign WB_ALU_R = reg_WB_ALU_R;
+   assign WB_CTRL = reg_WB_CTRL;
+   assign WB_DM_D = reg_WB_DM_D;
+   assign WB_HALT = reg_WB_HALT;
+   assign WB_PC = reg_WB_PC;
+   assign WB_PC_plus_1 = reg_WB_PC_plus_1;
+   assign WB_rW = reg_WB_rW; 
+   initial begin
+       reg_WB_ALU_R <= 0;
+       reg_WB_CTRL <= 0;
+       reg_WB_DM_D <= 0;
+       reg_WB_HALT <= 0;
+       reg_WB_PC <= 0;
+       reg_WB_PC_plus_1 <= 0;
+       reg_WB_rW <= 0;
+   end
    always@(posedge clk)
 	if(reset || lock&&clear)
 		begin

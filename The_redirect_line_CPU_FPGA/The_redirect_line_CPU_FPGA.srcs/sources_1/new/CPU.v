@@ -4,13 +4,16 @@ module CPU(
     input RST,
 	input [11:0]debug_addr,
     output [31:0] v_SyscallOut,
-    output [31:0] v_PC_debug,
     output [31:0] v_memory_out,
     output [15:0] v_total_cycles,
     output [15:0] v_jump_cycles,
     output [15:0] v_branch_sucess_cycles,
-	output [15:0] v_load_use_times
-    );
+	output [15:0] v_load_use_times,
+    output [31:0] v_IF_PC,
+    output [31:0] v_ID_PC,
+    output [31:0] v_EX_PC,
+    output [31:0] v_MEM_PC,
+    output [31:0] v_WB_PC);
 	
 	//global tunnels
 	wire lock,halting,stop;
@@ -20,15 +23,12 @@ module CPU(
 	wire[31:0]goto_addr;
 	///ID tunnels
 	wire WB_RF_WE;
-	wire[4:0]WB_rW;
 	wire[31:0]WB_RF_W;
 	wire[5:0]EX_OP;
 	wire[31:0]EX_Data;
 	wire EX_RF_WE;
-	wire[4:0]EX_rW;
 	wire[31:0]MEM_Data;
 	wire MEM_RF_WE;
-	wire[4:0]MEM_rW;
 
 	//4 interfaces' IOs
 	wire[31:0]IF_PC;
@@ -80,7 +80,7 @@ module CPU(
 
 	IF_ID IFtoID( .clk(clk),
 				  .clear(goto),
-				  .lock(lock),
+				  .lock(!lock),
 				  .reset(RST),
 				  .IF_IR(IF_IR),
 				  .IF_PC(IF_PC),
@@ -90,7 +90,7 @@ module CPU(
 				  .ID_PC_plus_1(ID_PC_PLUS_1));
 	ID_EX IDtoEX( .clk(clk),
 				  .clear(halting|goto|Load_Use),
-				  .lock(stop),
+				  .lock(!stop),
 				  .reset(RST),
 				  .ID_CTRL(ID_CTRL),
 				  .ID_IMM(ID_IMM),
@@ -159,7 +159,7 @@ module CPU(
 	assign PC_in = goto ? goto_addr : IF_PC_PLUS_1;
 	assign IF_PC = PC;
 	assign IF_PC_PLUS_1 = PC + 4;
-	ROM IM(.Address(PC[13:2]),.Data(IF_IR));
+	ROM IM(.Address(PC[11:2]),.Data(IF_IR));
 	
 	//ID Section
 	wire[5:0]ID_OP;
@@ -216,7 +216,7 @@ module CPU(
 						   .redirected_RF_B(rd_RF_B));
 	assign ID_RF_A = r_RF_A ? rd_RF_A : RF_A;
 	assign ID_RF_B = r_RF_B ? rd_RF_B : RF_B;
-	assign ID_rW = ID_CTRL[24] ? 5'b1f : (ID_CTRL[25] ? ID_rd : ID_rt);
+	assign ID_rW = ID_CTRL[24] ? 5'h1f : (ID_CTRL[25] ? ID_rd : ID_rt);
 
 	//EX Section
 	wire syscall,ALU_Equal;
@@ -226,15 +226,15 @@ module CPU(
 	assign syscall = EX_CTRL[8];
 	assign ALU_OP = EX_CTRL[31:28];
 	assign ALU_X = EX_CTRL[19] ? EX_RF_B : EX_RF_A;
-	assign ALU_y = EX_CTRL[17] ? EX_IMM : (EX_CTRL[18] ? EX_RF_A : EX_RF_B);
-	ALU alu(.S(ALU_OP),
+	assign ALU_Y = EX_CTRL[17] ? EX_IMM : (EX_CTRL[18] ? EX_RF_A : EX_RF_B);
+	ALU MIPS_alu(.S(ALU_OP),
             .X(ALU_X),
             .Y(ALU_Y),
-            .Result(),
-            .Result2(EX_ALU_R),
+            .Result(EX_ALU_R),
+            .Result2(),
             .Equal(ALU_Equal),
             .Overflow(),
-            UOF());
+            .UOF());
 	NPC npc(.ALU_Equal(ALU_Equal),
             .ALU_R(EX_ALU_R),
             .CTRL(EX_CTRL),
@@ -258,9 +258,8 @@ module CPU(
 			if(RST)
 				SyscallOut <= 0;
 			else if(!ALU_Equal&syscall)
-				SyscallOut <= PC_in;
+				SyscallOut <= EX_RF_B;
 		end
-	
 	//MEM Section
 	assign MEM_RF_WE = MEM_CTRL[23];
 	assign MEM_Data = (MEM_CTRL[21] | MEM_CTRL[20]) ? MEM_DM_D : MEM_ALU_R;
@@ -279,7 +278,7 @@ module CPU(
 									: {16'h0000,MEM_DM_D[31:16]};
 	assign WB_RF_WE = WB_CTRL[23];
 	assign WB_RF_W = !WB_CTRL[21] ? (!WB_CTRL[22] ? MEM_ALU_R 
-												  : MEM_PC_PLUS_1)
+												  : WB_PC_PLUS_1)
 								  : (!WB_CTRL[20] ? MEM_DM_D
 												  : halfword);
 	assign halting = WB_HALT;
@@ -294,5 +293,48 @@ module CPU(
 				halt = 1;
 		end
 	assign stop = halt;
-	
+	//counts
+	reg [15:0]total_num;
+    reg [15:0]jump_num;
+    reg [15:0]branch_succeed_num;
+    reg [15:0]Load_Use_num;
+    reg count_total;
+	initial begin
+	   count_total = 0;
+	    total_num = 0;
+        jump_num = 0;
+        branch_succeed_num = 0;
+        Load_Use_num = 0;
+	end
+	always@(posedge clk)
+           begin
+               if(RST) count_total = 0;
+               else count_total = stop;
+           end
+	always@(negedge clk)
+	   begin
+	       if(RST)
+               begin
+                   total_num = 0;
+                   jump_num = 0;
+                   branch_succeed_num = 0;
+                   Load_Use_num = 0;
+               end
+           if(!count_total&!RST) total_num = total_num + 1;
+           if(jump) jump_num = jump_num + 1;
+           if(branch) branch_succeed_num = branch_succeed_num + 1;
+           if(Load_Use) Load_Use_num = Load_Use_num + 1;
+	   end
+	//Display Data
+    assign v_SyscallOut = SyscallOut;
+	assign v_total_cycles = total_num;
+    assign v_jump_cycles = jump_num;
+    assign v_branch_sucess_cycles = branch_succeed_num;
+    assign v_load_use_times = Load_Use_num;
+    assign v_IF_PC = IF_PC;
+    assign v_ID_PC = ID_PC;
+    assign v_EX_PC = EX_PC;
+    assign v_MEM_PC = MEM_PC;
+    assign v_WB_PC = WB_PC;
+    
 endmodule

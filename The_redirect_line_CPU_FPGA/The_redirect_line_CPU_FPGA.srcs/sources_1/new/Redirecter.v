@@ -74,9 +74,9 @@ module Redirector( Control_signals,
    assign EX_Data_to_RF_B = collision_in_EX & (rB_in_EX_read | rB_in_EX_syscall);
    
    assign Load_Use = collision_in_EX & access_DM;
-   output redirect_RF_A = EX_Data_to_RF_A | collision_in_MEM&(rA_in_MEM_read | rA_in_MEM_syscall);
-   output redirect_RF_B = EX_Data_to_RF_B | collision_in_MEM&(rB_in_MEM_read | rB_in_MEM_syscall);
-   output[31:0] redirected_RF_A = EX_Data_to_RF_A ? EX_Data : MEM_Data;
-   output[31:0] redirected_RF_B = EX_Data_to_RF_B ? EX_Data : MEM_Data;
+   assign redirect_RF_A = EX_Data_to_RF_A | collision_in_MEM&(rA_in_MEM_read | rA_in_MEM_syscall);
+   assign redirect_RF_B = EX_Data_to_RF_B | collision_in_MEM&(rB_in_MEM_read | rB_in_MEM_syscall);
+   assign redirected_RF_A = EX_Data_to_RF_A ? EX_Data : MEM_Data;
+   assign redirected_RF_B = EX_Data_to_RF_B ? EX_Data : MEM_Data;
    
    endmodule
