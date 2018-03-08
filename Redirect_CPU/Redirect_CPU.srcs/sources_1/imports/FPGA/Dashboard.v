@@ -46,7 +46,7 @@ module Dashboard(
     // Module definitions //
     ////////////////////////
     Divider#(100000) timeDivide(.clk(clk), .clkout(dividedClk400hz));
-    Divider#(200000) timeDivide2(.clk(clk), .clkout(dividedClk100hz));
+    Divider#(2) timeDivide2(.clk(clk), .clkout(dividedClk100hz));
     CPU mipsCPU(.clk(dividedClk100hz),
                 .RST(BTNC),
                 .debug_addr(SW[11:0]),
